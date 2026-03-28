@@ -8,7 +8,7 @@ async function addProduct(req , res) {
       const {name, description, price, category, subCategory, sizes, bestSeller } = req.body
 
     if(!name || !description || !price || !category || !subCategory || !sizes || !bestSeller){
-            return res.status(400).send({message: "product details are missing"
+            return res.status(400).json({message: "product details are missing"
             })
         }
    
@@ -53,32 +53,33 @@ async function addProduct(req , res) {
             images: imagesUrl,
             
         })
- return res.status(200).send({
+ return res.status(200).json({
            
             message: "product added successfully",
             data: product
         })
 } catch(error){
         console.log(error)
-        return res.status(400).send({
+        return res.status(500).json({
             success: false,
+            message: "Error adding product",
             error: error.message
-    
+        })
+    }
 }
-  )}}
 
 
 
 async function listProducts(_req, res){
     try{
         const products = await Product.find().sort({createdAt: -1})
-        return res.status(200).send({
+        return res.status(200).json({
             message: "products fetched successfully",
             data: products
         })
     } catch(error){
         console.log(error)
-        return res.status(404).send({   
+        return res.status(500).json({   
             success: false,
             error: error.message
         })
@@ -89,7 +90,7 @@ async function removeProduct(req, res){
         const { productId } = req.params 
         
         if(!productId){
-            return res.status(400).send({
+            return res.status(400).json({
                 message: "product id is missing"
             })
         }
@@ -97,7 +98,7 @@ async function removeProduct(req, res){
         const product = await Product.findById(productId)
 
         if(!product){
-            return res.status(404).send({
+            return res.status(404).json({
                 message: "product not found"
             })
         }
@@ -110,13 +111,13 @@ async function removeProduct(req, res){
 
         await Product.findByIdAndDelete(productId)
 
-        return res.status(200).send({
+        return res.status(200).json({
             message: "product and images deleted successfully"
         })
 
     }catch(error){
         console.log(error)
-        return res.status(500).send({
+        return res.status(500).json({
             success:false,
             error:error.message
         })

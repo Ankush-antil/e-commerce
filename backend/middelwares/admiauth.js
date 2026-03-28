@@ -10,14 +10,14 @@ async function authAdmin(req, res, next){
     }
      
     if(!token){
-       return res.status(401).send({message: "Token not found"})
+       return res.status(401).json({message: "Token not found"})
     }
     try{
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         next()
     } catch(error){
         console.log(error)
-        return res.status(401).send({
+        return res.status(401).json({
         success: false,
         error: error.message
     })

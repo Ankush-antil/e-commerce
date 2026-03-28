@@ -5,11 +5,11 @@ async function addToCart(req, res){
        const {userId, productId, size} = req.body
 
        if(!userId || !productId || !size){
-        return res.status(400).send({message: "Missing required fields"})
+        return res.status(400).json({message: "Missing required fields"})
        }
       const user = await User.findById(userId)
        if(!user){
-        return res.status(400).send({message: "User not found"})
+        return res.status(400).json({message: "User not found"})
        }
        
        // find product with same productId and size
@@ -25,13 +25,13 @@ async function addToCart(req, res){
 
        await user.save()
 
-       return res.status(200).send({
+       return res.status(200).json({
         message: "Item added to cart",
         cart: user.cart
        })
    } catch(error){
         console.log(error)
-        return res.status(500).send({
+        return res.status(500).json({
             success: false, 
             error: error.message
         })
@@ -42,19 +42,19 @@ async function updateCart(req, res){
     try{
     const {userId, productId, size, quantity} = req.body
     if(!userId || !productId || !size || quantity === undefined){
-        return res.status(400).send({message: "Missing required fields"})
+        return res.status(400).json({message: "Missing required fields"})
     }
     
     const user = await User.findById(userId)
        if(!user){
-        return res.status(400).send({message: "User not found"})
+        return res.status(400).json({message: "User not found"})
     }
     
      // find product with same productId and size
     const existingCartItem = user.cart.find(item => item.productId.toString() === productId && item.size === size)
 
     if(!existingCartItem){
-        return res.status(400).send({message: "cart item not found"})
+        return res.status(400).json({message: "cart item not found"})
     }
 
     const existingCartItemIndex = user.cart.indexOf(existingCartItem)
@@ -68,14 +68,14 @@ async function updateCart(req, res){
 
     await user.save()
 
-    return res.status(200).send({
+    return res.status(200).json({
         message: "Cart updated successfully",
         cart: user.cart
     })
 
     } catch(error){
         console.log(error)
-        return res.status(500).send({
+        return res.status(500).json({
             success: false, 
             error: error.message
         })
@@ -86,21 +86,21 @@ async function getCart(req, res){
     try{
         const {userId} = req.body
         if(!userId){
-            return res.status(400).send({message: "User id is missing"})
+            return res.status(400).json({message: "User id is missing"})
         }
 
         const user = await User.findById(userId)
         if(!user){
-            return res.status(400).send({message: "User not found"})
+            return res.status(400).json({message: "User not found"})
         }
 
-        return res.status(200).send({
+        return res.status(200).json({
             message: "Cart fetched successfully",
             cart: user.cart
         })
     } catch(error){
         console.log(error)
-        return res.status(500).send({
+        return res.status(500).json({
             success: false, 
             error: error.message
         })

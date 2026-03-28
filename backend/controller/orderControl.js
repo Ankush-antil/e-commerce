@@ -8,7 +8,7 @@
             const {userId, address, items, amount} = req.body
 
             if(!userId || !address || !items || !amount){
-                return res.status(400).send({message: "Missing required fields"})
+                return res.status(400).json({message: "Missing required fields"})
             }
 
             const newOrder = await Order.create({
@@ -42,7 +42,7 @@
                 }
             }
             
-            return res.status(200).send({
+            return res.status(200).json({
                 success: true,
                 message: "Order placed successfully",
                 order: newOrder
@@ -50,7 +50,7 @@
         }
         catch(error){
             console.log(error)
-            return res.status(500).send({
+                return res.status(500).json({
                 success: false, 
                 error: error.message
             })
@@ -65,7 +65,7 @@
             const { userId } = req.body;
             
             if (!userId) {
-                return res.status(400).send({ message: "Missing userId" });
+                return res.status(400).json({ message: "Missing userId" });
             }
 
             const orders = await Order.aggregate([
@@ -218,7 +218,7 @@
         message: "Order status updated"
         })
     } catch (error) {
-        res.status(500).send({
+        res.status(500).json({
         success: false,
         message: error.message
         })
@@ -230,7 +230,7 @@
         
             
             if(!orderId){
-                return res.status(400).send({
+                return res.status(400).json({
                     message: "order id is missing"
                 })
             }
@@ -238,7 +238,7 @@
             const order = await Order.findById(orderId) 
 
             if(!order){
-                return res.status(404).send({
+                return res.status(404).json({
                     message: "Order not found"
                 })
             }
@@ -258,13 +258,13 @@
                    If you did not cancel this order please contact support.`
                 )
             }
-            return res.status(200).send({
+            return res.status(200).json({
                 message: "order deleted successfully"
             })
 
         }catch(error){
             console.log(error)
-            return res.status(500).send({
+            return res.status(500).json({
                 success:false,
                 error:error.message
             })

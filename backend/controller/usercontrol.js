@@ -10,13 +10,13 @@ async function register(req,res) {
     const {name, email , password} = req.body
 
     if (!name || !email || !password){
-        return res.status(400).send({message: "missing data"})
+        return res.status(400).json({message: "missing data"})
     }
      
     const result = userRegisterType.safeParse({name,email,password})
    if(!result.success){ 
     console.log("validation error:", result.error.errors)
-    return res.status(400).send({message: result.error.errors[0].message})
+    return res.status(400).json({message: result.error.errors[0].message})
 } 
 const data = result.data
 
@@ -25,7 +25,7 @@ const data = result.data
  const idcheck = await User.findOne({email : data.email} )
 
  if(idcheck){
-    return res.status(400).send(
+    return res.status(400).json(
        {message : "this email is already registered"})
  }
    
@@ -43,7 +43,7 @@ const data = result.data
         {id: data_pas._id}, process.env.JWT_SECRET,{expiresIn: "1h"} 
     )
 
-    return res.status(200).send({
+    return res.status(200).json({
     
         message: "user registered successfully",
         data: token,
@@ -52,7 +52,8 @@ const data = result.data
 
 } catch (error) {
      console.log(error)
-     return res.status(400).send({
+     return res.status(500).json({
+        success: false,
         message :"Registration failed",
         error : error.message
      })
@@ -64,31 +65,31 @@ async function signup(req , res) {
 
  const { email,password} = req.body
     if (!email||!password){
-        return res.status(400).send({message: "email and password are required"})
+        return res.status(400).json({message: "email and password are required"})
     }
 const result = userLoginType.safeParse({email,password})
    if(!result.success){ 
     console.log("validation error:", result.error.errors)
-    return res.status(400).send({message: result.error.errors[0].message})
+    return res.status(400).json({message: result.error.errors[0].message})
 } 
    const data = result.data
  const check = await User.findOne({email : data.email} )
   
   if(!check){ 
-        return res.status(400).send({
+        return res.status(400).json({
             message: "user does not exist with this email"
             
         })
     }
 const compare = await bcrypt.compare(data.password, check.password)
 if(!compare){
-    return res.status(401).send({message: "wrong password"})
+    return res.status(401).json({message: "wrong password"})
 }
  const token = jwt.sign(
         {id: check._id}, process.env.JWT_SECRET, {expiresIn: "1h"}
     )
 
-     return res.status(200).send({
+     return res.status(200).json({
         message: "user login successfully",
         data: token,
         user_id : check._id
@@ -96,7 +97,7 @@ if(!compare){
 
     }catch(error){
         console.log(error)
-        return res.status(500).send({
+        return res.status(500).json({
             success: false,
             message: "Login failed",
             error: error.message
@@ -108,14 +109,14 @@ if(!compare){
     try{
         const{email, password} = req.body
         if(!email || !password){
-            return res.status(400).send({
+            return res.status(400).json({
                 message: "credentials are missing"
         })
        }
     
           
        if(email !== process.env.ADMIN_EMAIL || password !== process.env.ADMIN_PASSWORD){
-            return res.status(401).send({
+            return res.status(401).json({
                 message: "Invalid credentials"
             })
        }
@@ -128,15 +129,16 @@ if(!compare){
         {expiresIn: "1h"}
        )
 
-       return res.status(200).send({
+       return res.status(200).json({
         message: "admin login successfully",
         data: token 
 
        })
     } catch(error){
         console.log(error)
-        return res.status(500).send({
+        return res.status(500).json({
             success: false,
+            message: "Admin login failed",
             error: error.message
         })
     }
