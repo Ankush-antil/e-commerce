@@ -51,7 +51,16 @@ const data = result.data
     })
 
 } catch (error) {
-     console.log(error)
+     console.log("Register error:", error)
+     
+     // Handle duplicate key error
+     if (error.code === 11000) {
+        return res.status(400).json({
+            success: false,
+            message: "This email is already registered"
+        })
+     }
+     
      return res.status(500).json({
         success: false,
         message :"Registration failed",
@@ -96,13 +105,13 @@ if(!compare){
     })
 
     }catch(error){
-        console.log(error)
+        console.log("Signup error:", error)
         return res.status(500).json({
             success: false,
             message: "Login failed",
             error: error.message
-        }) }
-    
+        }) 
+    }
 }
 
     async function adminLogin(req, res){
