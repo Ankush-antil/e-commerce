@@ -1,0 +1,322 @@
+/* ============================================
+   COLLECTION - Product Listing with Filters
+   ============================================ */
+
+.collection-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid #f0f0f0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+}
+
+/* ============================
+   FILTER SIDEBAR
+   ============================ */
+
+.filter-section {
+  width: 100%;
+}
+
+.filter-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 0;
+  user-select: none;
+}
+
+.dropdown-icon {
+  height: 12px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.rotate {
+  transform: rotate(90deg);
+}
+
+/* ---- Filter Boxes ---- */
+.filter-box {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+  background: #fafafa;
+
+  /* DEFAULT: hidden on mobile, visible on desktop */
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  padding: 0 1.25rem;
+  margin: 0;
+  border: none;
+  transition: all 0.35s ease;
+}
+
+/* WHEN .show CLASS IS ADDED (toggle click) */
+.filter-box.show {
+  max-height: 500px;
+  overflow: visible;
+  opacity: 1;
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+  border: 1px solid #e5e7eb;
+}
+
+.filter-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #374151;
+  margin-bottom: 0.75rem;
+}
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.filter-options label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.2s ease;
+}
+
+.filter-options label:hover {
+  color: #111;
+}
+
+.filter-options input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #111;
+  cursor: pointer;
+}
+
+/* ============================
+   PRODUCTS AREA
+   ============================ */
+
+.products-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.products-header h1 {
+  font-family: "Prata", serif;
+  font-size: 1.5rem;
+  color: #111;
+  letter-spacing: 0.5px;
+}
+
+.sort-dropdown {
+  border: 1.5px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  height: 42px;
+  padding: 0 12px;
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+}
+
+.sort-dropdown:focus {
+  border-color: #111;
+}
+
+/* ---- Product Grid ---- */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  row-gap: 2rem;
+  margin-bottom: 50px;
+}
+
+/* ============================
+   MOBILE (below 640px)
+   ============================ */
+
+@media (max-width: 639px) {
+  .collection-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .filter-section {
+    width: 100%;
+    position: relative;
+  }
+
+  /* Arrow icon VISIBLE on mobile */
+  .dropdown-icon {
+    display: block;
+  }
+
+  /* Filter box HIDDEN by default on mobile */
+  .filter-box {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0 1.25rem;
+    margin: 0;
+    border: none;
+  }
+
+  /* Filter box VISIBLE when toggled */
+  .filter-box.show {
+    max-height: 500px;
+    overflow: visible;
+    opacity: 1;
+    padding: 1rem 1.25rem;
+    margin-top: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fafafa;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .products-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .products-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .sort-dropdown {
+    width: 100%;
+  }
+}
+
+/* ============================
+   TABLET (640px+)
+   ============================ */
+
+@media (min-width: 640px) {
+  .collection-container {
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  .filter-section {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+    height: fit-content;
+  }
+
+  /* Arrow icon HIDDEN on desktop */
+  .dropdown-icon {
+    display: none;
+  }
+
+  /* Filter boxes ALWAYS visible on desktop */
+  .filter-box {
+    max-height: none;
+    overflow: visible;
+    opacity: 1;
+    padding: 1rem 1.25rem;
+    margin-top: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fafafa;
+  }
+
+  .products-header {
+    flex-direction: row;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================
+   SMALL DESKTOP (768px+)
+   ============================ */
+
+@media (min-width: 768px) {
+  .collection-container {
+    gap: 2.5rem;
+  }
+
+  .filter-section {
+    width: 210px;
+    min-width: 210px;
+    max-width: 210px;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ============================
+   LARGE DESKTOP (1024px+)
+   ============================ */
+
+@media (min-width: 1024px) {
+  .collection-container {
+    gap: 3rem;
+  }
+
+  .filter-section {
+    width: 240px;
+    min-width: 240px;
+    max-width: 240px;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* ============================
+   EXTRA LARGE (1280px+)
+   ============================ */
+
+@media (min-width: 1280px) {
+  .products-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -1,0 +1,60 @@
+/* ============================================
+   BEST SELLERS - Top Picks Section
+   ============================================ */
+
+.bestSeller-container {
+  margin-top: 80px;
+  padding-bottom: 40px;
+}
+
+.bestSeller-container h2 {
+  font-family: "Prata", serif;
+  text-align: center;
+  font-size: 1.75rem;
+  color: #111;
+  letter-spacing: 0.5px;
+}
+
+.bestSeller-desc {
+  text-align: center;
+  color: #9ca3af;
+  margin-top: 8px;
+  font-size: 13px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+@media (min-width: 640px) {
+  .bestSeller-desc {
+    font-size: 14px;
+  }
+}
+
+.bestSeller-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  row-gap: 28px;
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .bestSeller-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .bestSeller-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .bestSeller-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+  }
+}

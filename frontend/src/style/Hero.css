@@ -1,0 +1,150 @@
+/* ============================================
+   HERO - Dark Fashion Landing
+   ============================================ */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #2a2a2a;
+  margin-top: 40px;
+  margin-bottom: 80px;
+  overflow: hidden;
+  background: #111;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 169, 110, 0.03) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (min-width: 640px) {
+  .hero {
+    flex-direction: row;
+    min-height: 450px;
+  }
+}
+
+/* ---- Left Content ---- */
+.hero-left {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 30px;
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 640px) {
+  .hero-left {
+    width: 50%;
+    padding: 40px 60px;
+  }
+}
+
+.hero-text {
+  color: #d1d1d1;
+}
+
+.hero-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.line {
+  width: 44px;
+  height: 2px;
+  background: #c9a96e;
+  border-radius: 2px;
+}
+
+.line.thin {
+  height: 1px;
+  background: #c9a96e;
+}
+
+.hero-text p {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #888;
+}
+
+@media (min-width: 768px) {
+  .hero-text p {
+    font-size: 13px;
+  }
+}
+
+.hero-text h1 {
+  font-size: 32px;
+  line-height: 1.2;
+  margin: 16px 0;
+  font-family: "Prata", serif;
+  color: #f5f5f5;
+  letter-spacing: 1px;
+}
+
+@media (min-width: 1024px) {
+  .hero-text h1 {
+    font-size: 52px;
+  }
+}
+
+/* ---- Shop Now ---- */
+.shop-now {
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #c9a96e;
+  cursor: pointer;
+  padding-bottom: 4px;
+  border-bottom: 1.5px solid #c9a96e;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.shop-now:hover {
+  gap: 18px;
+  color: #e8d5a3;
+  border-color: #e8d5a3;
+}
+
+/* ---- Hero Image ---- */
+.hero-image {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  filter: brightness(0.85);
+  transition: all 0.6s ease;
+}
+
+.hero:hover .hero-image {
+  filter: brightness(0.95);
+  transform: scale(1.03);
+}
+
+@media (min-width: 640px) {
+  .hero-image {
+    width: 50%;
+    height: auto;
+  }
+}

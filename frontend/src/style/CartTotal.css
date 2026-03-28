@@ -1,0 +1,43 @@
+/* ============================================
+   CART TOTAL - Order Summary
+   ============================================ */
+
+.cart-total {
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.cart-total-title {
+  font-size: 1.5rem;
+  font-family: "Prata", serif;
+  color: #111;
+  letter-spacing: 0.5px;
+}
+
+.cart-total-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 15px;
+  color: #374151;
+}
+
+.cart-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.cart-total-final {
+  font-weight: 700;
+  font-size: 17px;
+ color: #374151;
+}
+
+.cart-total-details hr {
+  border: none;
+  border-top: 1px solid #f0f0f0;
+  margin: 4px 0;
+}

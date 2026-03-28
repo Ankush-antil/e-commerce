@@ -1,0 +1,135 @@
+/* ============================================
+   ABOUT US - Brand Story
+   ============================================ */
+
+.about-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid #f0f0f0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+}
+
+
+
+.about-title {
+  text-align: center;
+  padding-top: 36px;
+ 
+  font-size: 1.75rem;
+  font-family: "Prata", serif;
+  color: #111;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.about-title::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 2px;
+  background: #111;
+  margin: 14px auto 0;
+  border-radius: 2px;
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin: 50px 0;
+  align-items: center;
+}
+
+.about-image {
+  width: 100%;
+  max-width: 450px;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  transition: transform 0.4s ease;
+}
+
+.about-image:hover {
+  transform: scale(1.02);
+}
+
+.about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.about-heading {
+  color: #111;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* ---- Why Choose Us ---- */
+.why-title {
+  font-size: 1.25rem;
+  font-family: "Prata", serif;
+  color: #111;
+  padding: 20px 0;
+  letter-spacing: 0.5px;
+}
+
+.why-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 80px;
+  font-size: 14px;
+  gap: 0;
+}
+
+.why-card {
+  border: 1px solid #f0f0f0;
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.3s ease;
+  background: #fff;
+}
+
+.why-card:hover {
+  background: #fafafa;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+}
+
+.why-card b {
+  color: #111;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+}
+
+.why-card p {
+  color: #6b7280;
+  line-height: 1.7;
+}
+
+@media (min-width: 768px) {
+  .about-content {
+    flex-direction: row;
+    align-items: center;
+    gap: 70px;
+  }
+
+  .about-text {
+    width: 50%;
+  }
+
+  .why-container {
+    flex-direction: row;
+  }
+
+  .why-card {
+    padding: 60px 48px;
+  }
+}

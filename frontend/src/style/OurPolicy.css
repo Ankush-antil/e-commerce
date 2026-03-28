@@ -1,0 +1,81 @@
+/* ============================================
+   OUR POLICY - Trust Badges
+   ============================================ */
+
+.policy-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 2.5rem;
+  text-align: center;
+  padding: 5rem 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.policy-item {
+  max-width: 280px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+  background: linear-gradient(135deg, #FFF8DC 0%, #FFFACD 100%);
+  border: 2px solid #FFD700;
+}
+
+.policy-item:hover {
+  background: linear-gradient(135deg, #FFE4B5 0%, #FFF8DC 100%);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(212, 175, 55, 0.4);
+  border-color: #D4AF37;
+}
+
+.policy-icon {
+  width: 3rem;
+  margin: 0 auto 1.25rem;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.policy-item:hover .policy-icon {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.policy-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: #D4AF37;
+  letter-spacing: 0.3px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.policy-desc {
+  color: #666;
+  margin-top: 0.5rem;
+  font-size: 13px;
+  line-height: 1.6;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@media (min-width: 640px) {
+  .policy-container {
+    flex-direction: row;
+    gap: 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  .policy-item {
+    padding: 2rem 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .policy-container {
+    font-size: 1rem;
+    padding: 6rem 2rem;
+  }
+}

@@ -1,0 +1,186 @@
+/* ============================================
+   GLOBAL DARK THEME BASE
+   Add this to your index.css or App.css
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Prata&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  background-color: #0f0f0f;
+  color: #d1d1d1;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100vw;
+}
+
+/* ---- Scrollbar Styling ---- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f0f0f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c9a96e;
+}
+
+/* ---- Selection Color ---- */
+::selection {
+  background: #c9a96e;
+  color: #0f0f0f;
+}
+
+/* ---- Global Links ---- */
+a {
+  color: #c9a96e;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #e8d5a3;
+}
+
+/* ---- Container ---- */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ---- Section Title Component ---- */
+.section-title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.section-title h2 {
+  font-family: "Prata", serif;
+  font-size: 1.75rem;
+  color: #f5f5f5;
+  letter-spacing: 1px;
+}
+
+.section-title p {
+  color: #666;
+  font-size: 13px;
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+}
+
+.section-title .title-line {
+  display: inline-block;
+  width: 50px;
+  height: 2px;
+  background: #c9a96e;
+  margin-top: 12px;
+  border-radius: 2px;
+}
+
+/* ---- Global Button Styles ---- */
+.btn-primary {
+  background: #c9a96e;
+  color: #0f0f0f;
+  border: 2px solid #c9a96e;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.btn-primary:hover {
+  background: transparent;
+  color: #c9a96e;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(201, 169, 110, 0.2);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #c9a96e;
+  border: 1.5px solid #c9a96e;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.btn-outline:hover {
+  background: #c9a96e;
+  color: #0f0f0f;
+}
+
+/* ---- Global Input Styles ---- */
+.input-dark {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #2a2a2a;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #f5f5f5;
+  background: #1a1a1a;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.input-dark::placeholder {
+  color: #555;
+}
+
+.input-dark:focus {
+  border-color: #c9a96e;
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+}
+
+/* ---- Divider ---- */
+.divider {
+  border: none;
+  border-top: 1px solid #2a2a2a;
+  margin: 2rem 0;
+}
+
+/* ---- Loading Animation ---- */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}

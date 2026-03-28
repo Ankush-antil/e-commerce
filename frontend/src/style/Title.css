@@ -1,0 +1,31 @@
+.title-container {
+  display: flex;
+  gap: 0.5rem; 
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.75rem; 
+}
+
+.title-text {
+  color: #6b7280;
+  font-size: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title-highlight {
+  color: #374151;
+  font-weight: 500; 
+}
+
+.title-line {
+  width: 2rem;
+  height: 1px; 
+  background-color: #374151;
+}
+
+@media (min-width: 640px) {
+  .title-line {
+    width: 3rem; 
+    height: 2px;
+  }
+}

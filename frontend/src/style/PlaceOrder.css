@@ -1,0 +1,172 @@
+/* ============================================
+   PLACE ORDER - Checkout Experience
+   ============================================ */
+
+.place-order {
+  display: flex;
+  gap: 80px;
+  padding: 50px 0;
+  min-height: 80vh;
+  border-top: 1px solid #f0f0f0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@media (max-width: 768px) {
+  .place-order {
+    flex-direction: column;
+    gap: 40px;
+  }
+}
+
+.left {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.left h2 {
+  font-family: "Prata", serif;
+  font-size: 1.5rem;
+  color: #111;
+  letter-spacing: 0.5px;
+}
+
+.right {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  gap: 14px;
+}
+
+@media (max-width: 480px) {
+  .row {
+    flex-direction: column;
+  }
+}
+
+/* ---- Form Inputs ---- */
+.place-order input,
+input[type="text"],
+input[type="email"],
+input[type="tel"] {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #babfc7;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1f2937;
+  background: #d2d2d1;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.place-order input::placeholder {
+  
+  color: #374151;
+  font-weight: 400;
+}
+
+.place-order input:focus {
+  border-color: #111;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.heading-2 {
+  margin-top: 50px;
+  font-family: "Prata", serif;
+  font-size: 1.5rem;
+  color: #111;
+}
+
+/* ---- Payment Methods ---- */
+.payment-methods {
+  display: flex;
+  gap: 14px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.payment-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1.5px solid #d1d5db;
+  padding: 14px 18px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: #fff;
+  min-width: 130px;
+}
+
+.payment-box:hover {
+  border-color: #111;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.payment-box.selected {
+  border-color: #111;
+  background: #f9fafb;
+}
+
+.payment-box span {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #9ca3af;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.payment-box p {color: #111; }
+
+.payment-box span.active { 
+ 
+  background-color: #111;
+  border-color: #111;
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+.payment-box img {
+  height: 22px;
+  opacity: 0.8;
+}
+
+/* ---- Order Button ---- */
+.order-btn-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.order-btn {
+  margin-top: 32px;
+  padding: 16px 56px;
+  background: #716f6f;
+  color: #fff;
+  border: 2px solid #111;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.order-btn:hover {
+  background: #788721;
+  color: #130101;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.order-btn:active {
+  transform: translateY(0);
+}
