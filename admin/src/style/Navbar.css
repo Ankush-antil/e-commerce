@@ -1,0 +1,80 @@
+/* ============================================
+   ADMIN - Top Navigation Bar
+   ============================================ */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+@media (min-width: 768px) {
+  .navbar {
+    padding: 14px 40px;
+  }
+}
+
+.navbar-logo {
+  font-size: 24px;
+  color: #111;
+  text-decoration: none;
+  font-family: "Prata", serif;
+  letter-spacing: 1.5px;
+  transition: opacity 0.3s ease;
+}
+
+.navbar-logo:hover {
+  opacity: 0.7;
+}
+
+/* ---- Admin Badge ---- */
+.navbar-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-left: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ---- Logout Button ---- */
+.logout-btn {
+  background-color: #111;
+  color: #fff;
+  padding: 8px 24px;
+  border: 2px solid #111;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.logout-btn:hover {
+  background: #fff;
+  color: #111;
+}
+
+.logout-btn:active {
+  transform: scale(0.97);
+}
+
+@media (min-width: 640px) {
+  .logout-btn {
+    padding: 9px 28px;
+    font-size: 12px;
+  }
+}

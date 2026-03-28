@@ -1,0 +1,167 @@
+/* ============================================
+   ADMIN - Orders Management
+   ============================================ */
+
+.orders-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 20px;
+  letter-spacing: 0.3px;
+}
+
+.order-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 10px 0;
+  font-size: 13px;
+  color: #374151;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.order-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border-color: #e5e7eb;
+}
+
+@media (min-width: 640px) {
+  .order-card {
+    grid-template-columns: 70px 2fr 1fr;
+    font-size: 14px;
+    padding: 20px 24px;
+    align-items: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  .order-card {
+    grid-template-columns: 70px 2fr 1fr 1fr 1fr;
+  }
+}
+
+/* ---- Order Icon ---- */
+.order-icon {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  padding: 10px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid #f0f0f0;
+}
+
+/* ---- Order Info ---- */
+.order-info {
+  line-height: 1.6;
+}
+
+.order-info .customer-name {
+  font-weight: 600;
+  color: #111;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.order-info .order-items {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.order-info .order-address {
+  color: #9ca3af;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* ---- Amount ---- */
+.amount {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111;
+}
+
+/* ---- Items Count ---- */
+.items-count {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ---- Status Dropdown ---- */
+.status-select {
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  color: #374151;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  width: 100%;
+  max-width: 180px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+.status-select:focus {
+  border-color: #111;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Status Colors */
+.status-select.pending {
+  color: #d97706;
+  border-color: #fde68a;
+  background-color: #fffbeb;
+}
+
+.status-select.shipped {
+  color: #2563eb;
+  border-color: #bfdbfe;
+  background-color: #eff6ff;
+}
+
+.status-select.delivered {
+  color: #16a34a;
+  border-color: #bbf7d0;
+  background-color: #f0fdf4;
+}
+
+/* ---- Payment Badge ---- */
+.payment-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.payment-badge.paid {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.payment-badge.unpaid {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.payment-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
