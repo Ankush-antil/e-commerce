@@ -10,13 +10,13 @@ async function register(req,res) {
     const {name, email , password} = req.body
 
     if (!name || !email || !password){
-        return res.status(400).send("missing data ")
+        return res.status(400).send({message: "missing data"})
     }
      
     const result = userRegisterType.safeParse({name,email,password})
    if(!result.success){ 
-    console.log("invalid data type")
-    return res.status(400).send("invalid data type")
+    console.log("validation error:", result.error.errors)
+    return res.status(400).send({message: result.error.errors[0].message})
 } 
 const data = result.data
 
@@ -26,7 +26,7 @@ const data = result.data
 
  if(idcheck){
     return res.status(400).send(
-       {message : "this id is already register"})
+       {message : "this email is already registered"})
  }
    
     const pass_has = await bcrypt.hash(data.password,10 )
@@ -53,7 +53,7 @@ const data = result.data
 } catch (error) {
      console.log(error)
      return res.status(400).send({
-        message :"problem",
+        message :"Registration failed",
         error : error.message
      })
    }
@@ -64,11 +64,12 @@ async function signup(req , res) {
 
  const { email,password} = req.body
     if (!email||!password){
-        return res.status(400).send("missing data ")
+        return res.status(400).send({message: "email and password are required"})
     }
 const result = userLoginType.safeParse({email,password})
    if(!result.success){ 
-    return res.status(400).send("invalid data type")
+    console.log("validation error:", result.error.errors)
+    return res.status(400).send({message: result.error.errors[0].message})
 } 
    const data = result.data
  const check = await User.findOne({email : data.email} )
@@ -81,14 +82,14 @@ const result = userLoginType.safeParse({email,password})
     }
 const compare = await bcrypt.compare(data.password, check.password)
 if(!compare){
-    return res.status(401).send("wrong password")
+    return res.status(401).send({message: "wrong password"})
 }
  const token = jwt.sign(
         {id: check._id}, process.env.JWT_SECRET, {expiresIn: "1h"}
     )
 
      return res.status(200).send({
-        message: "user singup successfully",
+        message: "user login successfully",
         data: token,
         user_id : check._id
     })
@@ -97,6 +98,7 @@ if(!compare){
         console.log(error)
         return res.status(500).send({
             success: false,
+            message: "Login failed",
             error: error.message
         }) }
     

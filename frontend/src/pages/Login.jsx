@@ -93,8 +93,11 @@ const Login = () => {
             }
         }
         catch(error){
-          console.log(error.message),
-            console.log(error)
+          if (error.response) {
+            toast.error(error.response.data.message)
+          } else {
+            console.log(error.message);
+          }
         }
     }  
   }
