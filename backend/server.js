@@ -6,7 +6,7 @@ const connectCloudinary = require("./controller/cloudinary")
 const {signup, register, adminLogin} = require("./controller/usercontrol")
 const authAdmin= require("./middelwares/admiauth")
 const authUser = require("./middelwares/authUser")
-const { addprouduct, listProducts,removeProduct } = require("./controller/productcontrol")
+const { addProduct, listProducts,removeProduct } = require("./controller/productcontrol")
 const {placeOrderCOD,getUserOrders,allOrders,updateOrderStatus, removeOrder} = require("./controller/orderControl")
 const upload = require("./middelwares/multer")
 const { addToCart, updateCart, getCart } = require("./controller/cartcontrol")
@@ -26,7 +26,7 @@ app.post("/add-product", authAdmin,upload.fields([
     { name: 'image2', maxCount: 1 },
     { name: 'image3', maxCount: 1 },
     { name: 'image4', maxCount: 1 }
-]),addprouduct)
+]),addProduct)
 
 app.delete("/delete-product/:productId",authAdmin, removeProduct)
 app.delete("/delet-order",authUser,removeOrder)
@@ -43,6 +43,7 @@ app.put("/update-order-status", authAdmin, updateOrderStatus)
 
 
 
-app.listen(9000, function(){
-    console.log(" connect 9000 port")
+const PORT = process.env.PORT || 9000
+app.listen(PORT, function(){
+    console.log(` connect ${PORT} port`)
 })

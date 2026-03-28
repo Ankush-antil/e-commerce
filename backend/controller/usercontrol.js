@@ -10,13 +10,13 @@ async function register(req,res) {
     const {name, email , password} = req.body
 
     if (!name || !email || !password){
-        res.status(404).send("missing data ")
+        return res.status(400).send("missing data ")
     }
      
     const result = userRegisterType.safeParse({name,email,password})
    if(!result.success){ 
     console.log("invalid data type")
-    return res.status(420).send("invalid data type")
+    return res.status(400).send("invalid data type")
 } 
 const data = result.data
 
@@ -64,11 +64,11 @@ async function signup(req , res) {
 
  const { email,password} = req.body
     if (!email||!password){
-        res.status(404).send("missing data ")
+        return res.status(400).send("missing data ")
     }
 const result = userLoginType.safeParse({email,password})
    if(!result.success){ 
-    return res.status(420).send("invalid data type")
+    return res.status(400).send("invalid data type")
 } 
    const data = result.data
  const check = await User.findOne({email : data.email} )
@@ -79,12 +79,12 @@ const result = userLoginType.safeParse({email,password})
             
         })
     }
-const copm = await  bcrypt.compare(data.password, check.password)
-if(!copm){
-    return res.status(404).send("worng password")
+const compare = await bcrypt.compare(data.password, check.password)
+if(!compare){
+    return res.status(401).send("wrong password")
 }
  const token = jwt.sign(
-        {id: check._id}, process.env.JWT_SECRET,
+        {id: check._id}, process.env.JWT_SECRET, {expiresIn: "1h"}
     )
 
      return res.status(200).send({
@@ -112,8 +112,8 @@ if(!copm){
        }
     
           
-       if(email != process.env.ADMIN_EMAIL || password != process.env.ADMIN_PASSWORD){
-            return res.status(400).send({
+       if(email !== process.env.ADMIN_EMAIL || password !== process.env.ADMIN_PASSWORD){
+            return res.status(401).send({
                 message: "Invalid credentials"
             })
        }
@@ -123,6 +123,7 @@ if(!copm){
             email: email
         },
         process.env.JWT_SECRET,
+        {expiresIn: "1h"}
        )
 
        return res.status(200).send({

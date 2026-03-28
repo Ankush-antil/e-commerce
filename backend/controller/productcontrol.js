@@ -1,9 +1,9 @@
 
-const Product = require("/project5/e-commerce/backend/module/product")
+const Product = require("../module/product")
 const cloudinary = require("cloudinary").v2;
     
 
-async function addprouduct(req , res) {
+async function addProduct(req , res) {
   try{
       const {name, description, price, category, subCategory, sizes, bestSeller } = req.body
 
@@ -123,4 +123,4 @@ async function removeProduct(req, res){
     }
 }
 
-  module.exports = {addprouduct ,listProducts,removeProduct}
+  module.exports = {addProduct ,listProducts,removeProduct}

@@ -1,10 +1,16 @@
 const jwt = require("jsonwebtoken")
 
 async function authUser(req, res, next){
-    const token = req.headers.authorization
+    const authHeader = req.headers.authorization
+    let token = authHeader
+
+    // Handle Bearer token format
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+        token = authHeader.slice(7)
+    }
 
     if(!token){
-        return res.status(400).send({
+        return res.status(401).send({
             message: "Token not found"
         })
     }
@@ -14,7 +20,7 @@ async function authUser(req, res, next){
         next()
     } catch(error){
         console.log(error)
-        return res.status(500).send({
+        return res.status(401).send({
         success: false,
         error: error.message
     })

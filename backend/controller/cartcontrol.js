@@ -54,7 +54,7 @@ async function updateCart(req, res){
     const existingCartItem = user.cart.find(item => item.productId.toString() === productId && item.size === size)
 
     if(!existingCartItem){
-        res.status(400).send({message: "cart item not found"})
+        return res.status(400).send({message: "cart item not found"})
     }
 
     const existingCartItemIndex = user.cart.indexOf(existingCartItem)
