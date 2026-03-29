@@ -85,6 +85,131 @@ async function listProducts(_req, res){
         })
     }
 }
+
+async function getProductById(req, res){
+    try{
+        const { productId } = req.params
+        if(!productId){
+            return res.status(400).json({message: "Product id is missing"})
+        }
+
+        const product = await Product.findById(productId)
+        if(!product){
+            return res.status(404).json({message: "Product not found"})
+        }
+
+        return res.status(200).json({
+            message: "Product fetched successfully",
+            data: product
+        })
+    } catch(error){
+        console.log(error)
+        return res.status(500).json({success: false, error: error.message})
+    }
+}
+
+async function addReview(req,res){
+    try{
+        const { productId } = req.params
+        const { rating, text } = req.body
+
+        if(!productId || !rating || !text){
+            return res.status(400).json({message: "Missing review data"})
+        }
+        
+        if(rating < 1 || rating > 5){
+            return res.status(400).json({message: "Rating must be between 1 and 5"})
+        }
+
+        const product = await Product.findById(productId)
+        if(!product){
+            return res.status(404).json({message: "Product not found"})
+        }
+
+        const userId = req.user?.id
+        if(!userId){
+            return res.status(401).json({message: "Unauthorized"})
+        }
+
+        const user = await require("../module/user").findById(userId)
+        if(!user){
+            return res.status(404).json({message: "User not found"})
+        }
+
+        const review = {
+            userId: user._id,
+            userName: user.name,
+            rating,
+            text,
+            date: new Date()
+        }
+
+        product.reviews.push(review)
+        await product.save()
+
+        return res.status(200).json({
+            message: "Review added successfully",
+            data: product.reviews
+        })
+    } catch(error){
+        console.log(error)
+        return res.status(500).json({success: false, error: error.message})
+    }
+}
+
+async function deleteReview(req,res){
+    try{
+        const { productId, reviewId } = req.params
+        if(!productId || !reviewId){
+            return res.status(400).json({message: "Missing params"})
+        }
+
+        const product = await Product.findById(productId)
+        if(!product){
+            return res.status(404).json({message: "Product not found"})
+        }
+
+        const initialLength = product.reviews.length
+        product.reviews = product.reviews.filter((review) => review._id.toString() !== reviewId)
+
+        if(product.reviews.length === initialLength){
+            return res.status(404).json({message: "Review not found"})
+        }
+
+        await product.save()
+
+        return res.status(200).json({
+            message: "Review deleted successfully",
+            data: product.reviews
+        })
+    } catch(error){
+        console.log(error)
+        return res.status(500).json({success: false, error: error.message})
+    }
+}
+
+async function getProductReviews(req, res){
+    try {
+        const { productId } = req.params
+        if (!productId) {
+            return res.status(400).json({ message: "Product id is missing" })
+        }
+
+        const product = await Product.findById(productId)
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" })
+        }
+
+        return res.status(200).json({
+            message: "Product reviews fetched successfully",
+            data: product.reviews
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ success: false, error: error.message })
+    }
+}
+
 async function removeProduct(req, res){
     try{
         const { productId } = req.params 
@@ -124,4 +249,4 @@ async function removeProduct(req, res){
     }
 }
 
-  module.exports = {addProduct ,listProducts,removeProduct}
+module.exports = {addProduct, listProducts, getProductById, getProductReviews, addReview, deleteReview, removeProduct}

@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
@@ -8,7 +9,7 @@ import "../style/Product.css";
 import  {toast}  from "react-toastify";
   const Product = () => {
   const { productId } = useParams();
-  const { products, currency, addToCart , navigate, setCheckoutItems, cartItems, token, userId } = useContext(ShopContext);
+  const { products, currency, addToCart , navigate, setCheckoutItems, cartItems, token, userId, userName, backendUrl } = useContext(ShopContext);
   const [productData, setProductData] = useState(null);
   const [mainImage, setMainImage] = useState("");
   const [size, setSize] = useState("");
@@ -21,7 +22,6 @@ import  {toast}  from "react-toastify";
   const [hoverRating, setHoverRating] = useState(0);
   const [userRating, setUserRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
-  const [userName, setUserName] = useState("");
 
   // Check if product is already in cart
   useEffect(() => {
@@ -33,17 +33,28 @@ import  {toast}  from "react-toastify";
     }
   }, [cartItems, productData]);
   
-  // Load reviews from localStorage
+  // Load reviews from backend API
   useEffect(() => {
-    if (productId) {
-      const storedReviews = JSON.parse(localStorage.getItem(`reviews_${productId}`)) || [];
-      setReviews(storedReviews);
-      
-      if (storedReviews.length > 0) {
-        const avg = storedReviews.reduce((sum, review) => sum + review.rating, 0) / storedReviews.length;
-        setAverageRating(avg);
+    async function fetchReviews() {
+      if (!productId) return;
+      try {
+        const response = await axios.get(`${backendUrl}/product/${productId}/reviews`);
+        if (response.status === 200 && response.data?.data) {
+          const fetchedReviews = response.data.data;
+          setReviews(fetchedReviews);
+          if (fetchedReviews.length > 0) {
+            const avg = fetchedReviews.reduce((sum, review) => sum + review.rating, 0) / fetchedReviews.length;
+            setAverageRating(avg);
+          } else {
+            setAverageRating(0);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching reviews", error);
       }
     }
+
+    fetchReviews();
   }, [productId]);
 
 const handleBuyNow = () => {
@@ -89,7 +100,7 @@ const handleReviewClick = (rating) => {
   setShowReviewForm(true);
 }
 
-const handleSubmitReview = () => {
+const handleSubmitReview = async () => {
   if (!token || !userId) {
     navigate("/login");
     return;
@@ -105,27 +116,72 @@ const handleSubmitReview = () => {
     return;
   }
 
-  const newReview = {
-    id: Date.now(),
-    name: userName || "Anonymous User",
-    rating: userRating,
-    text: reviewText,
-    date: new Date().toLocaleDateString()
-  };
+  if(!userName){
+    toast.error("Please log in to submit a review with your profile name.");
+    return;
+  }
 
-  const updatedReviews = [...reviews, newReview];
-  setReviews(updatedReviews);
-  localStorage.setItem(`reviews_${productId}`, JSON.stringify(updatedReviews));
+  try {
+    const response = await axios.post(
+      `${backendUrl}/product/${productId}/add-review`,
+      { rating: userRating, text: reviewText },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token
+        }
+      }
+    );
 
-  const avg = updatedReviews.reduce((sum, review) => sum + review.rating, 0) / updatedReviews.length;
-  setAverageRating(avg);
+    if (response.status === 200) {
+      const updatedReviews = response.data.data;
+      setReviews(updatedReviews);
+      const avg = updatedReviews.reduce((sum, review) => sum + review.rating, 0) / updatedReviews.length;
+      setAverageRating(avg);
+      setUserRating(0);
+      setReviewText("");
+      setShowReviewForm(false);
+      toast.success("Review submitted successfully!");
+    } else {
+      toast.error(response.data.message || "Failed to submit review");
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Failed to submit review");
+  }
 
-  setUserRating(0);
-  setReviewText("");
-  setUserName("");
-  setShowReviewForm(false);
-  toast.success("Review submitted successfully!");
 }
+
+const handleDeleteReview = async (reviewId) => {
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  try {
+    const response = await axios.delete(
+      `${backendUrl}/product/${productId}/review/${reviewId}`,
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    );
+
+    if (response.status === 200) {
+      const updatedReviews = response.data.data;
+      setReviews(updatedReviews);
+      const avg = updatedReviews.length
+        ? updatedReviews.reduce((sum, review) => sum + review.rating, 0) / updatedReviews.length
+        : 0;
+      setAverageRating(avg);
+      toast.success("Review deleted successfully");
+    } else {
+      toast.error(response.data.message || "Failed to delete review");
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Failed to delete review");
+  }
+};
 
   useEffect(() => {
     const product = products.find((item) => item._id === productId);
@@ -307,9 +363,9 @@ const handleSubmitReview = () => {
                   <label>Your Name</label>
                   <input
                     type="text"
-                    placeholder="Enter your name (optional)"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
+                    value={userName || ""}
+                    disabled
+                    placeholder="Your user name"
                   />
                 </div>
 
@@ -369,6 +425,14 @@ const handleSubmitReview = () => {
                       <span className="review-date">{review.date}</span>
                     </div>
                     <p className="review-text">{review.text}</p>
+                    {localStorage.getItem("isAdmin") === "true" && (
+                      <button
+                        className="delete-review-btn"
+                        onClick={() => handleDeleteReview(review._id)}
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 ))
               ) : (

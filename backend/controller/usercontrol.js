@@ -47,7 +47,8 @@ const data = result.data
     
         message: "user registered successfully",
         data: token,
-        user_id : data_pas._id
+        user_id: data_pas._id,
+        user_name: data_pas.name
     })
 
 } catch (error) {
@@ -78,8 +79,8 @@ async function signup(req , res) {
     }
 const result = userLoginType.safeParse({email,password})
    if(!result.success){ 
-    console.log("validation error:", result.error.errors)
-    return res.status(400).json({message: result.error.errors[0].message})
+    console.log("validation error:", result.error.issues)
+    return res.status(400).json({message: result.error.issues[0].message})
 } 
    const data = result.data
  const check = await User.findOne({email : data.email} )
@@ -101,7 +102,8 @@ if(!compare){
      return res.status(200).json({
         message: "user login successfully",
         data: token,
-        user_id : check._id
+        user_id: check._id,
+        user_name: check.name
     })
 
     }catch(error){

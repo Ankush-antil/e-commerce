@@ -10,6 +10,7 @@ import axios from 'axios';
 
 export default function ShopContextProvider({ children }) {
   const userId = localStorage.getItem("userId") || ""
+  const [ userName, setUserName ] = useState(localStorage.getItem("userName") || "")
     const [ products, setProducts ] = useState([])
     const [checkoutItems, setCheckoutItems] = useState([])
     const currency = "₹";
@@ -178,7 +179,7 @@ export default function ShopContextProvider({ children }) {
         search, showSearch, setSearch, setShowSearch, 
         addToCart, getCartCount, cartItems, 
         updateQuantity, getCartAmount , token , setToken, backendUrl ,setCartItems,checkoutItems,
-setCheckoutItems, userId
+setCheckoutItems, userId, userName, setUserName
     };
 
     return(

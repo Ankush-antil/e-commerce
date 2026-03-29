@@ -6,7 +6,7 @@ import '../style/Login.css';
 
 const Login = () => {
   const [currentState, setCurrentState] = useState('Login');
-   const { token, setToken, navigate, backendUrl } = useContext(ShopContext);
+   const { token, setToken, setUserName, navigate, backendUrl } = useContext(ShopContext);
 
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -45,10 +45,12 @@ const Login = () => {
                 const token = result.data
                localStorage.setItem("token", token)
                 localStorage.setItem("userId", result.user_id)
+                localStorage.setItem("userName", result.user_name)
                 setName("")
                 setEmail("")
                 setPassword("")
                 setToken(token)
+                setUserName(result.user_name)
                  toast.success(result.message)
                  navigate("/")
             } 
@@ -89,6 +91,8 @@ const Login = () => {
                 const token = result.data
                 localStorage.setItem("token", token)
                 localStorage.setItem("userId", result.user_id)
+                localStorage.setItem("userName", result.user_name)
+                setUserName(result.user_name)
                 setEmail("")
                 setPassword("")
                  toast.success(result.message)
