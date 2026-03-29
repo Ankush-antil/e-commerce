@@ -15,8 +15,8 @@ async function register(req,res) {
      
     const result = userRegisterType.safeParse({name,email,password})
    if(!result.success){ 
-    console.log("validation error:", result.error.errors)
-    return res.status(400).json({message: result.error.errors[0].message})
+    console.log("validation error:", result.error.issues)
+    return res.status(400).json({message: result.error.issues[0].message})
 } 
 const data = result.data
 

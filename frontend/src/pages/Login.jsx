@@ -16,6 +16,12 @@ const Login = () => {
   async function onSubmitHandler(e){
     e.preventDefault()
    
+    // Password validation
+    if(password.length < 6){
+      toast.error("Password must be at least 6 characters long")
+      return
+    }
+    
     if(currentState === "Sign Up"){
       try {
         const response = await axios.post(
