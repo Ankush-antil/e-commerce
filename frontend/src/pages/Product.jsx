@@ -11,6 +11,7 @@ import  {toast}  from "react-toastify";
   const { productId } = useParams();
   const { products, currency, addToCart , navigate, setCheckoutItems, cartItems, token, userId, userName, backendUrl } = useContext(ShopContext);
   const [productData, setProductData] = useState(null);
+  const [visibleReviews, setVisibleReviews] = useState(5);
   const [mainImage, setMainImage] = useState("");
   const [size, setSize] = useState("");
   const [showShareModal, setShowShareModal] = useState(false);
@@ -394,13 +395,14 @@ const handleDeleteReview = async (reviewId) => {
 
             <div className="reviews-list">
               {reviews.length > 0 ? (
-                reviews.map((review) => {
+                reviews.slice(0, visibleReviews).map((review) => {
                   const reviewOwner = review.userId?.toString() || "";
                   const currentUser = userId?.toString() || "";
                   const isAdmin = localStorage.getItem("isAdmin") === "true";
                   const canDelete = isAdmin || (reviewOwner && currentUser && reviewOwner === currentUser);
-
+                     
                   return (
+                    
                     <div key={review._id || review.id} className="review-item">
                       <div className="review-header">
                         <div>
@@ -424,12 +426,23 @@ const handleDeleteReview = async (reviewId) => {
                           ✕
                         </button>
                       )}
+
                     </div>
+                    
                   )
                 })
+                
               ) : (
                 <p className="no-reviews">No reviews yet. Be the first to review this product!</p>
               )}
+              {visibleReviews < reviews.length && (
+                         <button
+                        className="see-more-btn"
+                          onClick={() => setVisibleReviews(prev => prev + 5)}
+                                 >
+                            See More
+                            </button>
+                                   )}
             </div>
           </div>
         )}
