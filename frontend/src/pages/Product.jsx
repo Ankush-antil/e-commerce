@@ -133,6 +133,8 @@ const handleSubmitReview = () => {
       setProductData(product);
       setMainImage(product.images[0].url);
     }
+    // Ensure description tab is active when navigating to a new product
+    setActiveTab("description");
   }, [productId, products]);
 
   if (!productData) return <div className="product-hidden">No product found</div>;
