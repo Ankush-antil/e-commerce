@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 
-async function authAdmin(req, res, next){
+async function authAdminOrUser(req, res, next){
     const authHeader = req.headers.authorization
     let token = authHeader
 
@@ -24,4 +24,5 @@ async function authAdmin(req, res, next){
     })
     }
 }
-module.exports = authAdmin
+
+module.exports = authAdminOrUser

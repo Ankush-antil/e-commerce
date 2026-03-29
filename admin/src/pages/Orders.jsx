@@ -1,38 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { backendUrl, currency } from '../App'
+import { backendUrl, currency } from '../config'
 import { toast } from 'react-toastify'
-import { assets } from '../assets/assets'
 import '../style/Orders.css'
 import axios from 'axios'
 
 const Orders = ({ token }) => {
   const [orders, setOrders] = useState([])
-
-  const fetchAllOrders = async () => {
-    if (!token) return
-
-    try { 
-      const response = await axios.post(
-        `${backendUrl}/all-orders`,
-        {},
-        {
-          headers: {
-            Authorization: token
-          }
-        }
-)
-      const result =  response.data
-
-      if (response.status===200) {
-        setOrders(result.data || [])
-        console.log('Orders:', result.data)
-      } else {
-        toast.error(result.message || 'Failed to fetch orders')
-      }
-    } catch (error) {
-      toast.error(error.message)
-    }
-  }
 
   const statusHandler = async (orderId, status) => {
     try {  
@@ -44,7 +17,7 @@ const Orders = ({ token }) => {
 
        {
           headers: {
-            Authorization: token
+            Authorization: `Bearer ${token}`
           }
         })
 
@@ -66,8 +39,35 @@ const Orders = ({ token }) => {
   }
 
   useEffect(() => {
-    fetchAllOrders()
-  }, [])
+    const loadOrders = async () => {
+      if (!token) return
+
+      try {
+        const response = await axios.post(
+          `${backendUrl}/all-orders`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+
+        const result = response.data
+
+        if (response.status === 200) {
+          setOrders(result.data || [])
+          console.log('Orders:', result.data)
+        } else {
+          toast.error(result.message || 'Failed to fetch orders')
+        }
+      } catch (error) {
+        toast.error(error.message)
+      }
+    }
+
+    loadOrders()
+  }, [token])
 
   return (
     <div className="orders">

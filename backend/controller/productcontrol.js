@@ -1,65 +1,98 @@
 
 const Product = require("../module/product")
 const cloudinary = require("cloudinary").v2;
+const mongoose = require("mongoose");
     
 
-async function addProduct(req , res) {
-  try{
-      const {name, description, price, category, subCategory, sizes, bestSeller } = req.body
+async function addProduct(req, res) {
+  try {
+    const { name, description, price, category, subCategory, sizes, bestSeller } = req.body;
 
-    if(!name || !description || !price || !category || !subCategory || !sizes || !bestSeller){
-            return res.status(400).json({message: "product details are missing"
-            })
-        }
-   
-      let image1, image2, image3, image4
-    
+    if (!name || !description || !price || !category || !subCategory || !sizes) {
+      return res.status(400).json({ message: "product details are missing" });
+    }
 
-      if (req.files.image1) {
-          image1 = req.files.image1[0]
-      }
+    let parsedSizes = [];
+    try {
+      parsedSizes = JSON.parse(sizes);
+    } catch {
+      return res.status(400).json({ message: "Invalid sizes format" });
+    }
 
-      if (req.files.image2) {
-          image2 = req.files.image2[0]
-      }
+    let image1, image2, image3, image4;
 
-      if (req.files.image3) {
-          image3 = req.files.image3[0]
-      }
+    if (req.files?.image1) image1 = req.files.image1[0];
+    if (req.files?.image2) image2 = req.files.image2[0];
+    if (req.files?.image3) image3 = req.files.image3[0];
+    if (req.files?.image4) image4 = req.files.image4[0];
 
-      if (req.files.image4) {
-          image4 = req.files.image4[0]
-      }
-        const image = [image1 , image2, image3, image4].filter((itma)=> itma !== undefined)
-        let imagesUrl = await Promise.all(
-            image.map(async (item) => {
-                let result = await cloudinary.uploader.upload(item.path, {resource_type: "image"})
-                
-                return {url: result.secure_url,
-                       public_id: result.public_id}
-                
-                  
-            })
-        )
-   
-        const product = await Product.create({
-            name, 
-            description,
-            price: Number(price),
-            category,
-            subCategory,
-            sizes: JSON.parse(sizes),
-            bestSeller: bestSeller === "true" ? true : false,
-            images: imagesUrl,
-            
-        })
+    const image = [image1, image2, image3, image4].filter((i) => i);
+
+    if (image.length === 0) {
+      return res.status(400).json({ message: "At least one image is required" });
+    }
+
+    let imagesUrl = await Promise.all(
+      image.map(async (item) => {
+        let result = await cloudinary.uploader.upload(item.path, {
+          resource_type: "image",
+        });
+
+        return {
+          url: result.secure_url,
+          public_id: result.public_id,
+        };
+      })
+    );
+
+    const product = await Product.create({
+      name,
+      description,
+      price: Number(price),
+      category,
+      subCategory,
+      sizes: parsedSizes,
+      bestSeller: bestSeller === "true",
+      images: imagesUrl,
+    });            
+        
+
+        // Automatically seed demo reviews for the new product
+        const sampleUsers = [
+            "Manavalli", "Ravi", "Sunita", "Ankush", "Nikita", "Rohit", "Priya", "Sandeep", "Neha", "Karan", "Gauri", "Vivek", "Meera", "Aditi", "Yash", "Shreya", "Aman", "Zoya", "Ishaan", "Rohan"
+        ];
+
+        const sampleText = [
+            "Excellent product, works as expected.",
+            "Good value for money.",
+            "Delivery was fast, product quality is very nice.",
+            "Highly recommended for everyone.",
+            "Decent product with good packaging.",
+            "I am very satisfied with the purchase.",
+            "The product meets my expectations.",
+            "Good support from the seller.",
+            "Looks premium and functions well.",
+            "Five stars!"
+        ];
+
+        const newReviews = sampleUsers.map((name, idx) => ({
+            userId: new mongoose.Types.ObjectId(),
+            userName: name,
+            rating: Math.floor(Math.random() * 5) + 1,
+            text: sampleText[idx % sampleText.length],
+            date: new Date()
+        }))
+
+        product.reviews = newReviews
+        await product.save()
+
  return res.status(200).json({
            
-            message: "product added successfully",
+            message: "product added successfully with demo reviews",
             data: product
         })
 } catch(error){
-        console.log(error)
+       console.log("ADD ERROR:", error);
         return res.status(500).json({
             success: false,
             message: "Error adding product",
@@ -138,7 +171,7 @@ async function seedDemoReviews(req, res){
         ];
 
         const newReviews = sampleUsers.slice(0, 20).map((name, idx) => ({
-            userId: req.user.id,
+            userId: new mongoose.Types.ObjectId(),
             userName: name,
             rating: Math.floor(Math.random() * 5) + 1,
             text: sampleText[idx % sampleText.length],
@@ -151,6 +184,56 @@ async function seedDemoReviews(req, res){
         return res.status(200).json({
             message: "20 demo reviews added successfully",
             data: product.reviews
+        })
+    } catch(error){
+        console.log(error)
+        return res.status(500).json({success: false, error: error.message})
+    }
+}
+
+async function seedAllReviews(req, res){
+    try{
+        const products = await Product.find()
+        if(!products || products.length === 0){
+            return res.status(404).json({message: "No products found"})
+        }
+
+        const sampleUsers = [
+            "Manavalli", "Ravi", "Sunita", "Ankush", "Nikita", "Rohit", "Priya", "Sandeep", "Neha", "Karan", "Gauri", "Vivek", "Meera", "Aditi", "Yash", "Shreya", "Aman", "Zoya", "Ishaan", "Rohan"
+        ];
+
+        const sampleText = [
+            "Excellent product, works as expected.",
+            "Good value for money.",
+            "Delivery was fast, product quality is very nice.",
+            "Highly recommended for everyone.",
+            "Decent product with good packaging.",
+            "I am very satisfied with the purchase.",
+            "The product meets my expectations.",
+            "Good support from the seller.",
+            "Looks premium and functions well.",
+            "Five stars!"
+        ];
+
+        let totalReviewsAdded = 0
+
+        for(const product of products){
+            const newReviews = sampleUsers.map((name, idx) => ({
+                userId: new mongoose.Types.ObjectId(),
+                userName: name,
+                rating: Math.floor(Math.random() * 5) + 1,
+                text: sampleText[idx % sampleText.length],
+                date: new Date()
+            }))
+
+            product.reviews = [...product.reviews, ...newReviews]
+            await product.save()
+            totalReviewsAdded += newReviews.length
+        }
+
+        return res.status(200).json({
+            message: `Seeded demo reviews for ${products.length} products (${totalReviewsAdded} reviews)`,
+            data: { totalProducts: products.length, totalReviews: totalReviewsAdded }
         })
     } catch(error){
         console.log(error)
@@ -314,4 +397,4 @@ async function removeProduct(req, res){
     }
 }
 
-module.exports = {addProduct, listProducts, getProductById, getProductReviews, addReview, deleteReview, seedDemoReviews, removeProduct}
+module.exports = {addProduct, listProducts, getProductById, getProductReviews, addReview, deleteReview, seedDemoReviews, seedAllReviews, removeProduct}

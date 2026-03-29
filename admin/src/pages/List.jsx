@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { backendUrl, currency } from '../App'
+import { backendUrl, currency } from '../config'
 import { toast } from 'react-toastify'
 import '../style/List.css'
 import axios from 'axios'
@@ -42,7 +42,7 @@ const List = ({ token }) => {
   async function removeProduct(productId){
     try{
       const response = await axios.delete(`${backendUrl}/delete-product/${productId}`,
-        {headers:{Authorization:token}}
+        {headers:{Authorization:`Bearer ${token}`}}
       )
     
       const result = response.data
@@ -63,6 +63,7 @@ const List = ({ token }) => {
   }
 
   useEffect(function(){
+    // eslint-disable-next-line react-hooks/set-state-in-effect
      fetchProduct()
   },[])
 
@@ -77,6 +78,7 @@ const List = ({ token }) => {
           <b>Name</b>
           <b>Category</b>
           <b>Price</b>
+          <b>Reviews</b>
           <b className="center">Action</b>
         </div>
         
@@ -88,10 +90,11 @@ const List = ({ token }) => {
 
         {list.map((item, index) => (
           <div className="list-row" key={index}>
-          <img className="product-img" src={item.images[0].url} alt="" />
+          <img className="product-img" src={item.images?.[0]?.url || item.images?.[0] || '/placeholder-image.png'} alt="" />
             <p>{item.name}</p>
             <p>{item.category}</p>
             <p>{currency}{item.price}</p>
+            <p>{item.reviews?.length || 0}</p>
             <p
               className="remove-btn"
               onClick={() => removeProduct(item._id)}

@@ -24,6 +24,11 @@ const Sidebar = () => {
           <p className="sidebar-text">Orders</p>
         </Link>
 
+        <Link className={active === 'reviews' ? 'sidebar-link active' : 'sidebar-link'} to="/reviews" onClick={() => setActive('reviews')}>
+          <img className="sidebar-icon" src={assets.order_icon} alt="Reviews" />
+          <p className="sidebar-text">Reviews</p>
+        </Link>
+
       </div>
     </div>
   )

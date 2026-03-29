@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { assets } from "../assets/assets"
-import { backendUrl } from "../App"
+import { backendUrl } from "../config"
 import "../style/Add.css"
 import { toast } from "react-toastify"
 import axios from "axios"
@@ -18,6 +18,21 @@ const Add = ({token}) => {
   const [price, setPrice] = useState('')
   const [sizes, setSizes] = useState([])
   const [bestSeller, setBestSeller] = useState(false)
+  const [availableSizes, setAvailableSizes] = useState(["S", "M", "L", "XL", "XXL"])
+
+  useEffect(() => {
+    if (subCategory === "Footwear") {
+      if (category === "Kids") {
+        setAvailableSizes(["1", "2", "3", "4"])
+      } else {
+        setAvailableSizes(["5", "6", "7", "8", "9", "10", "11", "12"])
+      }
+    } else {
+      setAvailableSizes(["S", "M", "L", "XL", "XXL"])
+    }
+    // Reset sizes when category/subCategory changes
+    setSizes([])
+  }, [category, subCategory])
 
   function toggleSize(size){
     if(sizes.includes(size)){
@@ -50,7 +65,7 @@ const Add = ({token}) => {
           
           {
             headers: {
-              Authorization: token,
+              Authorization: `Bearer ${token}`,
              
             }
           }
@@ -169,11 +184,9 @@ const Add = ({token}) => {
       <div>
           <p className="label">Product Sizes</p>
           <div className="sizes">
-          <p onClick={() => toggleSize('S')} className={`size-box ${ sizes.includes('S') ? 'size-active' : 'size-inactive'}`}>S</p>
-          <p onClick={() => toggleSize('M')} className={`size-box ${ sizes.includes('M') ? 'size-active' : 'size-inactive'}`}>M</p>
-          <p onClick={() => toggleSize('L')} className={`size-box ${ sizes.includes('L') ? 'size-active' : 'size-inactive'}`}>L</p>
-          <p onClick={() => toggleSize('XL')} className={`size-box ${ sizes.includes('XL') ? 'size-active' : 'size-inactive'}`}>XL</p>
-          <p onClick={() => toggleSize('XXL')} className={`size-box ${ sizes.includes('XXL') ? 'size-active' : 'size-inactive'}`}>XXL</p>
+          {availableSizes.map(size => (
+            <p key={size} onClick={() => toggleSize(size)} className={`size-box ${ sizes.includes(size) ? 'size-active' : 'size-inactive'}`}>{size}</p>
+          ))}
           </div>
       </div>
 

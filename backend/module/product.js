@@ -31,11 +31,16 @@ const productSchema = new mongoose.Schema({
         required: true,
         default: false
     },
-    images:{
-        public_id:String,
-        type: Array,
-        required: true
-    },
+    images:[{
+        public_id: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true
+        }
+    }],
     reviews:[
       {
         userId: {
