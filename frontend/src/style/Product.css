@@ -536,6 +536,28 @@
   font-weight: 500;
 }
 
+.review-item {
+  position: relative;
+  padding-right: 48px;
+}
+
+.delete-review-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  border: none;
+  background: transparent;
+  color: #dc2626;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 700;
+  outline: none;
+}
+
+.delete-review-btn:hover {
+  color: #b91c1c;
+}
+
 .write-review-btn {
   padding: 0.7rem 1.5rem;
   background: #c9a96e;

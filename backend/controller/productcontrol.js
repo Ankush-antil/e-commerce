@@ -108,6 +108,56 @@ async function getProductById(req, res){
     }
 }
 
+async function seedDemoReviews(req, res){
+    try{
+        const { productId } = req.params
+        if(!productId){
+            return res.status(400).json({message: "Product id is missing"})
+        }
+
+        const product = await Product.findById(productId)
+        if(!product){
+            return res.status(404).json({message: "Product not found"})
+        }
+
+        const sampleUsers = [
+            "Manavalli", "Ravi", "Sunita", "Ankush", "Nikita", "Rohit", "Priya", "Sandeep", "Neha", "Karan", "Gauri", "Vivek", "Meera", "Aditi", "Yash", "Shreya", "Aman", "Zoya", "Ishaan", "Rohan"
+        ];
+
+        const sampleText = [
+            "Excellent product, works as expected.",
+            "Good value for money.",
+            "Delivery was fast, product quality is very nice.",
+            "Highly recommended for everyone.",
+            "Decent product with good packaging.",
+            "I am very satisfied with the purchase.",
+            "The product meets my expectations.",
+            "Good support from the seller.",
+            "Looks premium and functions well.",
+            "Five stars!"
+        ];
+
+        const newReviews = sampleUsers.slice(0, 20).map((name, idx) => ({
+            userId: req.user.id,
+            userName: name,
+            rating: Math.floor(Math.random() * 5) + 1,
+            text: sampleText[idx % sampleText.length],
+            date: new Date()
+        }));
+
+        product.reviews = [...product.reviews, ...newReviews];
+        await product.save();
+
+        return res.status(200).json({
+            message: "20 demo reviews added successfully",
+            data: product.reviews
+        })
+    } catch(error){
+        console.log(error)
+        return res.status(500).json({success: false, error: error.message})
+    }
+}
+
 async function addReview(req,res){
     try{
         const { productId } = req.params
@@ -169,12 +219,27 @@ async function deleteReview(req,res){
             return res.status(404).json({message: "Product not found"})
         }
 
-        const initialLength = product.reviews.length
-        product.reviews = product.reviews.filter((review) => review._id.toString() !== reviewId)
-
-        if(product.reviews.length === initialLength){
+        const review = product.reviews.find((r) => r._id.toString() === reviewId)
+        if(!review){
             return res.status(404).json({message: "Review not found"})
         }
+
+        const loggedInUserId = req.user?.id
+        const loggedInUserEmail = req.user?.email
+
+        if(!loggedInUserId && !loggedInUserEmail){
+            return res.status(401).json({message: "Unauthorized"})
+        }
+
+        // Allow deletion by review owner or admin
+        const isOwner = loggedInUserId && review.userId?.toString() === loggedInUserId.toString()
+        const isAdmin = loggedInUserEmail && loggedInUserEmail === process.env.ADMIN_EMAIL
+
+        if(!isOwner && !isAdmin){
+            return res.status(403).json({message: "Only review author or admin can delete this review"})
+        }
+
+        product.reviews = product.reviews.filter((r) => r._id.toString() !== reviewId)
 
         await product.save()
 
@@ -249,4 +314,4 @@ async function removeProduct(req, res){
     }
 }
 
-module.exports = {addProduct, listProducts, getProductById, getProductReviews, addReview, deleteReview, removeProduct}
+module.exports = {addProduct, listProducts, getProductById, getProductReviews, addReview, deleteReview, seedDemoReviews, removeProduct}

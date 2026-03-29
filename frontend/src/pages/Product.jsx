@@ -116,11 +116,6 @@ const handleSubmitReview = async () => {
     return;
   }
 
-  if(!userName){
-    toast.error("Please log in to submit a review with your profile name.");
-    return;
-  }
-
   try {
     const response = await axios.post(
       `${backendUrl}/product/${productId}/add-review`,
@@ -360,16 +355,6 @@ const handleDeleteReview = async (reviewId) => {
               <div className="review-form">
                 <h4>Share your experience</h4>
                 <div className="form-group">
-                  <label>Your Name</label>
-                  <input
-                    type="text"
-                    value={userName || ""}
-                    disabled
-                    placeholder="Your user name"
-                  />
-                </div>
-
-                <div className="form-group">
                   <label>Rating</label>
                   <div className="star-rating">
                     {[1, 2, 3, 4, 5].map((star) => (
@@ -409,32 +394,39 @@ const handleDeleteReview = async (reviewId) => {
 
             <div className="reviews-list">
               {reviews.length > 0 ? (
-                reviews.map((review) => (
-                  <div key={review.id} className="review-item">
-                    <div className="review-header">
-                      <div>
-                        <h5>{review.name}</h5>
-                        <div className="review-stars">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <span key={star} className={star <= review.rating ? 'filled' : ''}>
-                              ★
-                            </span>
-                          ))}
+                reviews.map((review) => {
+                  const reviewOwner = review.userId?.toString() || "";
+                  const currentUser = userId?.toString() || "";
+                  const isAdmin = localStorage.getItem("isAdmin") === "true";
+                  const canDelete = isAdmin || (reviewOwner && currentUser && reviewOwner === currentUser);
+
+                  return (
+                    <div key={review._id || review.id} className="review-item">
+                      <div className="review-header">
+                        <div>
+                          <h5>{review.userName || "Unknown"}</h5>
+                          <div className="review-stars">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <span key={star} className={star <= review.rating ? 'filled' : ''}>
+                                ★
+                              </span>
+                            ))}
+                          </div>
                         </div>
+                        <span className="review-date">{new Date(review.date).toLocaleString()}</span>
                       </div>
-                      <span className="review-date">{review.date}</span>
+                      <p className="review-text">{review.text}</p>
+                      {canDelete && (
+                        <button
+                          className="delete-review-btn"
+                          onClick={() => handleDeleteReview(review._id || review.id)}
+                        >
+                          ✕
+                        </button>
+                      )}
                     </div>
-                    <p className="review-text">{review.text}</p>
-                    {localStorage.getItem("isAdmin") === "true" && (
-                      <button
-                        className="delete-review-btn"
-                        onClick={() => handleDeleteReview(review._id)}
-                      >
-                        Delete
-                      </button>
-                    )}
-                  </div>
-                ))
+                  )
+                })
               ) : (
                 <p className="no-reviews">No reviews yet. Be the first to review this product!</p>
               )}
