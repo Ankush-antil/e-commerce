@@ -1,4 +1,3 @@
-
 const Product = require("../module/product")
 const cloudinary = require("cloudinary").v2;
 const mongoose = require("mongoose");
@@ -396,5 +395,85 @@ async function removeProduct(req, res){
         })
     }
 }
+async function updateProduct(req, res) {
+  try {
+    const { productId } = req.params;
 
-module.exports = {addProduct, listProducts, getProductById, getProductReviews, addReview, deleteReview, seedDemoReviews, seedAllReviews, removeProduct}
+    if (!productId) {
+      return res.status(400).json({ message: "Product id is missing" });
+    }
+
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const updates = { ...req.body };
+
+    if (updates.sizes) {
+      try {
+        updates.sizes = JSON.parse(updates.sizes);
+      } catch {
+        return res.status(400).json({ message: "Invalid sizes format" });
+      }
+    }
+
+    if (updates.price !== undefined) {
+      updates.price = Number(updates.price);
+    }
+
+    if (updates.bestSeller !== undefined) {
+      updates.bestSeller =
+        updates.bestSeller === "true" || updates.bestSeller === true;
+    }
+
+    if (req.files) {
+      const imageFieldKeys = ["image_0", "image_1", "image_2", "image_3"];
+
+      for (const key of imageFieldKeys) {
+        if (!req.files[key] || !req.files[key][0]) {
+          continue;
+        }
+
+        const index = Number(key.split("_")[1]);
+        const file = req.files[key][0];
+
+        const result = await cloudinary.uploader.upload(file.path, {
+          resource_type: "image",
+        });
+
+        if (product.images[index]?.public_id) {
+          await cloudinary.uploader.destroy(product.images[index].public_id);
+        }
+
+        product.images[index] = {
+          url: result.secure_url,
+          public_id: result.public_id,
+        };
+      }
+
+      updates.images = product.images.filter(Boolean);
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      { $set: updates },
+      { new: true, runValidators: true }
+    );
+
+    return res.status(200).json({
+      message: "Product updated successfully",
+      data: updatedProduct,
+    });
+
+  } catch (error) {
+    console.log("UPDATE ERROR:", error);
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+}
+
+module.exports = {updateProduct, addProduct, listProducts, getProductById, getProductReviews, addReview, deleteReview, seedDemoReviews, seedAllReviews, removeProduct}

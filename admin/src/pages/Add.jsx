@@ -21,18 +21,33 @@ const Add = ({token}) => {
   const [availableSizes, setAvailableSizes] = useState(["S", "M", "L", "XL", "XXL"])
 
   useEffect(() => {
-    if (subCategory === "Footwear") {
-      if (category === "Kids") {
-        setAvailableSizes(["1", "2", "3", "4"])
-      } else {
-        setAvailableSizes(["5", "6", "7", "8", "9", "10", "11", "12"])
-      }
+  if (subCategory === "Bottomwear") {
+    if (category === "Kids") {
+      setAvailableSizes(["18", "20", "22", "24", "26", "28"]);
     } else {
-      setAvailableSizes(["S", "M", "L", "XL", "XXL"])
+      setAvailableSizes(["30", "32", "34", "36", "38", "40", "42", "44"]);
     }
-    // Reset sizes when category/subCategory changes
-    setSizes([])
-  }, [category, subCategory])
+
+  } else if (subCategory === "Footwear") {
+    if (category === "Kids") {
+      setAvailableSizes(["1", "2", "3", "4"]);
+    } else {
+      setAvailableSizes(["5", "6", "7", "8", "9", "10", "11", "12"]);
+    }
+
+  } else {
+    // Topwear ya baaki sab
+    if (category === "Kids") {
+      setAvailableSizes(["2Y", "3Y", "4Y", "5Y", "6Y", "7Y"]);
+    } else {
+      setAvailableSizes(["S", "M", "L", "XL", "XXL"]);
+    }
+  }
+
+  // Reset selected sizes
+  setSizes([]);
+
+}, [category, subCategory]);
 
   function toggleSize(size){
     if(sizes.includes(size)){

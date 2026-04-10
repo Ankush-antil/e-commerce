@@ -7,7 +7,7 @@ const {signup, register, adminLogin} = require("./controller/usercontrol")
 const authAdmin= require("./middelwares/admiauth")
 const authUser = require("./middelwares/authUser")
 const authAdminOrUser = require("./middelwares/authAdminOrUser")
-const { addProduct, listProducts, getProductById, getProductReviews, addReview, deleteReview, seedDemoReviews, seedAllReviews, removeProduct } = require("./controller/productcontrol")
+const { addProduct,updateProduct, listProducts, getProductById, getProductReviews, addReview, deleteReview, seedDemoReviews, seedAllReviews, removeProduct } = require("./controller/productcontrol")
 const {placeOrderCOD,getUserOrders,allOrders,updateOrderStatus, removeOrder} = require("./controller/orderControl")
 const upload = require("./middelwares/multer")
 const { addToCart, updateCart, getCart } = require("./controller/cartcontrol")
@@ -38,7 +38,12 @@ app.post("/product/:productId/add-review", authUser, addReview)
 app.delete("/product/:productId/review/:reviewId", authAdminOrUser, deleteReview)
 app.post("/product/:productId/seed-reviews", authAdmin, seedDemoReviews)
 app.post("/seed-all-reviews", authAdmin, seedAllReviews)
-
+app.patch("/products/:productId", authAdmin, upload.fields([
+    { name: 'image_0', maxCount: 1 },
+    { name: 'image_1', maxCount: 1 },
+    { name: 'image_2', maxCount: 1 },
+    { name: 'image_3', maxCount: 1 }
+]), updateProduct)
 app.post("/add-to-cart", authUser, addToCart)
 app.post("/update-cart", authUser, updateCart)
 app.post("/get-cart", authUser, getCart)
