@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { backendUrl } from '../config'
 import { toast } from 'react-toastify'
-import '../style/Orders.css'
+import '../style/Reviews.css'
 
 const Reviews = ({ token }) => {
   const [products, setProducts] = useState([])
@@ -106,19 +106,19 @@ const Reviews = ({ token }) => {
   if (loading) return <p>Loading reviews...</p>
 
   return (
-    <div className="orders">
-      <div className="orders-container" style={{ padding: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', alignItems: 'center' }}>
-          <p style={{ fontSize: '22px', fontWeight: 700 }}>Product Reviews Management</p>
-          <button className="submit-btn" style={{ width: 'auto', padding: '8px 16px' }} onClick={seedAllProductsReviews}>
+    <div className="reviews">
+      <div className="reviews-container">
+        <div className="reviews-header">
+          <p className="reviews-title">Product Reviews Management</p>
+          <button className="submit-btn seed-all-btn" onClick={seedAllProductsReviews}>
             Seed All Products
           </button>
         </div>
 
         {products.length === 0 && <p>No products found</p>}
 
-        <div style={{ backgroundColor: '#fff', borderRadius: '8px', overflow: 'hidden', border: '1px solid #ddd' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '120px 2fr 120px 100px 100px 200px', fontWeight: 700, padding: '12px', backgroundColor: '#f5f5f5', borderBottom: '1px solid #ddd' }}>
+        <div className="reviews-list-container">
+          <div className="reviews-table-header">
             <span>Image</span>
             <span>Product</span>
             <span>Category</span>
@@ -127,27 +127,25 @@ const Reviews = ({ token }) => {
             <span>Actions</span>
           </div>
           {products.map((product) => (
-            <div key={product._id} style={{ display: 'grid', gridTemplateColumns: '120px 2fr 120px 100px 100px 200px', alignItems: 'center', padding: '12px', borderBottom: '1px solid #eee' }}>
+            <div key={product._id} className="reviews-table-row">
               <img
                 src={product.images?.[0]?.url || product.images?.[0]}
                 alt={product.name}
-                style={{ width: 80, height: 80, borderRadius: 8, objectFit: 'cover' }}
+                className="review-img"
               />
-              <span style={{ fontSize: '14px' }}>{product.name}</span>
-              <span>{product.category}</span>
-              <span style={{ textAlign: 'center', fontWeight: 600 }}>{product.reviews?.length || 0}</span>
-              <span style={{ textAlign: 'center', fontWeight: 600 }}>{getAverageRating(product.reviews)}</span>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <span className="review-product-name" data-label="Product">{product.name}</span>
+              <span data-label="Category">{product.category}</span>
+              <span className="review-stat" data-label="Reviews">{product.reviews?.length || 0}</span>
+              <span className="review-stat" data-label="Avg Rating">{getAverageRating(product.reviews)}</span>
+              <div className="actions">
                 <button
                   className="submit-btn"
-                  style={{ padding: '6px 10px', fontSize: '12px', flex: 1 }}
                   onClick={() => seedReviews(product._id)}
                 >
                   Seed 20
                 </button>
                 <button
                   className="cancel-btn"
-                  style={{ padding: '6px 10px', fontSize: '12px', flex: 1 }}
                   onClick={() => {
                     setSelectedProduct(product)
                     setShowReviewsModal(true)
@@ -163,29 +161,10 @@ const Reviews = ({ token }) => {
 
       {/* Reviews Modal */}
       {showReviewsModal && selectedProduct && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000
-        }}>
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '8px',
-            padding: '24px',
-            maxWidth: '600px',
-            maxHeight: '80vh',
-            overflow: 'auto',
-            width: '90%'
-          }}>
+        <div className="reviews-modal-overlay">
+          <div className="reviews-modal-content">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ margin: 0 }}>Reviews for {selectedProduct.name}</h3>
+              <h3 style={{ margin: 0, fontSize: '18px' }}>Reviews for {selectedProduct.name}</h3>
               <button 
                 onClick={() => setShowReviewsModal(false)}
                 style={{ background: 'none', border: 'none', fontSize: '24px', cursor: 'pointer', padding: 0 }}
@@ -197,13 +176,7 @@ const Reviews = ({ token }) => {
             {selectedProduct.reviews && selectedProduct.reviews.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {selectedProduct.reviews.map((review, idx) => (
-                  <div key={idx} style={{
-                    padding: '12px',
-                    backgroundColor: '#f9f9f9',
-                    borderRadius: '6px',
-                    borderLeft: '4px solid #333',
-                    position: 'relative'
-                  }}>
+                  <div key={idx} className="review-item">
                     <button
                       onClick={() => {
                         deleteReview(selectedProduct._id, review._id)
@@ -227,7 +200,7 @@ const Reviews = ({ token }) => {
                     >
                       ✕
                     </button>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', paddingRight: '24px' }}>
+                    <div className="review-header-info" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', paddingRight: '24px' }}>
                       <span style={{ fontWeight: 600 }}>{review.userName}</span>
                       <span style={{ color: '#666', fontSize: '12px' }}>{new Date(review.date).toLocaleDateString()}</span>
                     </div>
@@ -261,7 +234,7 @@ const Reviews = ({ token }) => {
                 className="submit-btn"
                 style={{ padding: '8px 16px' }}
               >
-                Seed 20 Reviews
+                Seed 20
               </button>
             </div>
           </div>
