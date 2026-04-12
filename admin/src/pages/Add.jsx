@@ -24,8 +24,8 @@ const Add = ({token}) => {
   if (subCategory === "Bottomwear") {
     if (category === "Kids") {
       setAvailableSizes(["18", "20", "22", "24", "26", "28"]);
-    } else {
-      setAvailableSizes(["30", "32", "34", "36", "38", "40", "42", "44"]);
+    } else  {
+      setAvailableSizes(["28","30", "32", "34", "36", "38", "40", "42", "44"]);
     }
 
   } else if (subCategory === "Footwear") {
@@ -166,10 +166,10 @@ const Add = ({token}) => {
         <div className="row">
         <div>
           <p className="label">Product category</p>
-          <select className="select" onChange={(e) => setCategory(e.target.value)}>
-            <option>Men</option>
-            <option>Women</option>
-            <option>Kids</option>
+          <select className="select" value={category} onChange={(e) => setCategory(e.target.value)}>
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+            <option value="Kids">Kids</option>
           </select>
         </div>
 
@@ -177,11 +177,12 @@ const Add = ({token}) => {
           <p className="label">Sub category</p>
           <select
             className="select"
+            value={subCategory}
             onChange={(e) => setSubCategory(e.target.value)}
           >
-            <option>Topwear</option>
-            <option>Bottomwear</option>
-            <option>Footwear</option>
+            <option value="Topwear">Topwear</option>
+            <option value="Bottomwear">Bottomwear</option>
+            <option value="Footwear">Footwear</option>
           </select>
         </div>
 

@@ -7,6 +7,7 @@ import axios from 'axios'
 const List = ({ token }) => {
   const [list, setList] = useState([])
   const [editId, setEditId] = useState(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const [name, setName] = useState('')
   const [price, setPrice] = useState('')
@@ -154,9 +155,23 @@ const List = ({ token }) => {
     }
   }
 
+  const filteredList = list.filter(item => 
+    (item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())) || 
+    (item.category && item.category.toLowerCase().includes(searchQuery.toLowerCase()))
+  )
+
   return (
     <>
-      <p className="list-title">All Products List</p>
+      <div className="list-header-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', flexWrap: 'wrap', gap: '10px' }}>
+        <p className="list-title" style={{ margin: 0 }}>All Products List (Total: {list.length})</p>
+        <input 
+          type="text" 
+          placeholder="Search items..." 
+          value={searchQuery} 
+          onChange={(e) => setSearchQuery(e.target.value)} 
+          style={{ padding: '8px 12px', border: '1px solid #c5c5c5', borderRadius: '4px', width: '250px', outline: 'none' }}
+        />
+      </div>
 
       <div className="list-wrapper">
         <div className="list-header">
@@ -168,13 +183,13 @@ const List = ({ token }) => {
           <b className="center">Action</b>
         </div>
 
-        {list?.length === 0 && (
+        {filteredList?.length === 0 && (
           <p className='not-found'>
             No products found!
           </p>
         )}
 
-        {list.map((item, index) => (
+        {filteredList.map((item, index) => (
           <div className="list-row" key={index}>
             <img className="product-img" src={item.images?.[0]?.url || item.images?.[0] || '/placeholder-image.png'} alt={item.name} />
             <p className="product-name-cell">{item.name}</p>
